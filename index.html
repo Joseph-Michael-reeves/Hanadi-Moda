@@ -8,57 +8,48 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-        h1, h2, h3, .brand-font {
-            font-family: 'Playfair Display', serif;
-        }
-        .luxury-gradient {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-        }
-        .gold-accent {
-            color: #d4af37;
-        }
-        .gold-bg {
-            background-color: #d4af37;
-        }
-        .nav-link {
-            position: relative;
-        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
+        
+        /* Ensure sections don't hide under the sticky nav when scrolling */
+        section { scroll-margin-top: 80px; }
+
+        .luxury-gradient { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); }
+        .gold-accent { color: #d4af37; }
+        .nav-link { position: relative; cursor: pointer; }
         .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: #d4af37;
-            transition: width 0.3s ease;
+            content: ''; position: absolute; width: 0; height: 1px; bottom: -2px; left: 0;
+            background-color: #d4af37; transition: width 0.3s ease;
         }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        /* Fallback for broken images */
-        img {
-            background-color: #f3f4f6;
-            position: relative;
-        }
-        img::before {
-            content: "";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #e5e7eb;
-        }
+        .nav-link:hover::after { width: 100%; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+
+        .cart-drawer { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .cart-drawer.open { transform: translateX(0); }
+        
+        .modal-animate { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        /* Image Placeholder Fallback */
+        .img-placeholder { background-color: #e5e7eb; position: relative; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-900">
 
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-24 right-6 z-[100] bg-zinc-900 text-white px-6 py-4 rounded shadow-2xl transform translate-x-[150%] transition-transform duration-500 flex items-center gap-3">
+        <i class="fas fa-check-circle text-amber-500"></i>
+        <span id="toastMessage">Item added to bag</span>
+    </div>
+
     <!-- Top Bar -->
-    <div class="bg-zinc-900 text-white py-2 px-4 text-center text-xs uppercase tracking-widest border-b border-zinc-800">
-        Complimentary Shipping on VIP Collections | International Delivery Available
+    <div class="bg-zinc-900 text-white py-2 px-4 text-center text-[10px] md:text-xs uppercase tracking-widest border-b border-zinc-800">
+        Complimentary Shipping on VIP Collections
     </div>
 
     <!-- Navigation -->
@@ -66,23 +57,20 @@
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex gap-8 items-center hidden md:flex text-sm uppercase tracking-wider font-medium">
                 <a href="#collections" class="nav-link">Collections</a>
-                <a href="#vip" class="nav-link">VIP Line</a>
-                <a href="#bespoke" class="nav-link">Bespoke</a>
+                <button onclick="toggleBespokeModal()" class="nav-link uppercase">Bespoke</button>
+                <a href="#new-arrivals" class="nav-link">New In</a>
             </div>
             
-            <div class="text-3xl font-bold tracking-tighter brand-font italic">
-                HANADI <span class="text-stone-400 font-light not-italic">MODA</span>
+            <div class="text-2xl md:text-3xl font-bold tracking-tighter brand-font italic cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                HANADI <span class="text-stone-400 font-light not-italic uppercase text-xl md:text-2xl ml-1">Moda</span>
             </div>
 
             <div class="flex gap-6 items-center">
-                <a href="https://www.instagram.com/hanadi_moda/" target="_blank" class="hover:text-amber-600 transition-colors">
-                    <i class="fab fa-instagram text-xl"></i>
-                </a>
-                <div class="relative">
-                    <i class="fas fa-shopping-bag text-xl cursor-pointer"></i>
-                    <span class="absolute -top-2 -right-2 bg-amber-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                <div class="relative group cursor-pointer" onclick="toggleCart()">
+                    <i class="fas fa-shopping-bag text-xl"></i>
+                    <span id="cartCountBadge" class="absolute -top-2 -right-2 bg-amber-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">0</span>
                 </div>
-                <button class="md:hidden">
+                <button class="md:hidden" id="mobileMenuBtn">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
@@ -90,256 +78,310 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative h-[85vh] flex items-center overflow-hidden">
+    <section class="relative h-[90vh] flex items-center overflow-hidden">
         <div class="absolute inset-0 bg-black/40 z-10"></div>
-        <!-- High Quality Hero Image -->
-        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop" 
-             onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop'"
-             alt="Luxury Abaya" class="absolute inset-0 w-full h-full object-cover">
+        <img src="header.png" 
+             alt="Luxury Abaya Hero" class="absolute inset-0 w-full h-full object-cover">
         
         <div class="relative z-20 max-w-7xl mx-auto px-6 w-full text-white">
             <div class="max-w-2xl">
                 <span class="uppercase tracking-[0.3em] text-sm mb-4 block animate-pulse">The 2025 Collection</span>
-                <h1 class="text-6xl md:text-8xl mb-8 leading-tight">Elegance <br> <span class="italic font-light">Redefined</span></h1>
-                <p class="text-lg mb-10 text-stone-200 font-light max-w-md">Discover the artistry of Hanadi Moda. From everyday grace to bridal magnificence, we craft the essence of modesty.</p>
-                <div class="flex gap-4">
-                    <a href="#collections" class="bg-white text-zinc-900 px-8 py-4 uppercase text-xs tracking-widest font-bold hover:bg-amber-600 hover:text-white transition-all duration-300">Shop Now</a>
-                    <a href="#bespoke" class="border border-white/50 backdrop-blur-md px-8 py-4 uppercase text-xs tracking-widest font-bold hover:bg-white/10 transition-all duration-300">Bespoke Design</a>
+                <h1 class="text-6xl md:text-8xl mb-8 leading-tight">Elegance <br> <span class="italic font-light text-stone-300">Redefined</span></h1>
+                <p class="text-lg mb-10 text-stone-200 font-light max-w-md">Discover curated modest luxury. Crafted in Dubai, worn by the modern woman.</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#collections" class="bg-white text-zinc-900 px-8 py-4 text-center uppercase text-xs tracking-widest font-bold hover:bg-amber-600 hover:text-white transition-all duration-300">Shop Collection</a>
+                    <button onclick="toggleBespokeModal()" class="border border-white/50 backdrop-blur-md px-8 py-4 uppercase text-xs tracking-widest font-bold hover:bg-white/10 transition-all duration-300">Start Bespoke Order</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Categories Grid -->
+    <!-- Categories -->
     <section id="collections" class="py-24 max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
             <h2 class="text-4xl mb-4 italic">Our Curated Selection</h2>
-            <p class="text-stone-500 uppercase tracking-widest text-xs">Exquisite Fabrics & Master Tailoring</p>
+            <div class="w-12 h-[1px] bg-amber-600 mx-auto mb-4"></div>
+            <p class="text-stone-500 uppercase tracking-widest text-[10px]">Exquisite Fabrics & Master Tailoring</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- VIP Abayas -->
+            <!-- VIP -->
             <div class="group cursor-pointer relative overflow-hidden aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1585145197082-dba093ba6457?q=80&w=1974&auto=format&fit=crop" 
-                     class="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-110" alt="VIP Abaya">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
-                    <h3 class="text-white text-2xl mb-2 italic">VIP Collection</h3>
-                    <p class="text-stone-300 text-sm mb-4">Hand-embroidered masterpieces</p>
-                    <span class="text-white text-xs uppercase tracking-widest border-b border-white/30 inline-block pb-1">Explore Line</span>
+                <img src="https://instagram.ftlv6-1.fna.fbcdn.net/v/t51.82787-15/589178313_17866820556501972_1864164380035857252_n.jpg?stp=dst-jpg_e35_p720x720_tt6&_nc_cat=103&ig_cache_key=Mzc4MDgwMTEyOTEzNjA1NDI5NQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTgzMC5zZHIuQzMifQ%3D%3D&_nc_ohc=PvVuJHYZMAMQ7kNvwGXvJqv&_nc_oc=Adnorc0CS8q5H7AVW_uUdk_zytjf7nNQ5EPWIKcahD95DfDk-ZAIpFR0w1y3v-SYAICmBEtLtdJuNIXh_7H4yfFg&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.ftlv6-1.fna&_nc_gid=Xasd_-GBYxK4e1rA3-cWgg&_nc_ss=8&oh=00_AfyIZkn7wiEzsxd1lXwJ50Vn3eVzgcRJHNpWd2mQECl94Q&oe=69B9CD79" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" alt="VIP Collection">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
+                <div class="absolute inset-0 flex flex-col justify-end p-8 text-white">
+                    <h3 class="text-2xl mb-1 italic">VIP Line</h3>
+                    <p class="text-stone-300 text-xs mb-4 uppercase tracking-tighter">Limited Masterpieces</p>
+                    <span class="text-xs uppercase tracking-[0.2em] border-b border-white/30 pb-1 w-fit">Discover</span>
                 </div>
             </div>
-
-            <!-- Wedding/Bridal -->
-            <div class="group cursor-pointer relative overflow-hidden aspect-[3/4] md:-translate-y-12 shadow-2xl z-10">
-                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3ecc50f6?q=80&w=2071&auto=format&fit=crop" 
-                     class="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-110" alt="Wedding Abaya">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
-                    <h3 class="text-white text-2xl mb-2 italic">Bridal & Occasions</h3>
-                    <p class="text-stone-300 text-sm mb-4">For your most cherished moments</p>
-                    <span class="text-white text-xs uppercase tracking-widest border-b border-white/30 inline-block pb-1">Explore Line</span>
+            <!-- Bridal -->
+            <div class="group cursor-pointer relative overflow-hidden aspect-[3/4] md:-translate-y-8 shadow-2xl">
+                <img src="pic2 2.jpg" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" alt="Bridal Gallery">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
+                <div class="absolute inset-0 flex flex-col justify-end p-8 text-white">
+                    <h3 class="text-2xl mb-1 italic">Bridal & Occasion</h3>
+                    <p class="text-stone-300 text-xs mb-4 uppercase tracking-tighter">The Wedding Gallery</p>
+                    <span class="text-xs uppercase tracking-[0.2em] border-b border-white/30 pb-1 w-fit">Discover</span>
                 </div>
             </div>
-
-            <!-- Daily Use -->
+            <!-- Daily -->
             <div class="group cursor-pointer relative overflow-hidden aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=2070&auto=format&fit=crop" 
-                     class="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-110" alt="Daily Use Abaya">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
-                    <h3 class="text-white text-2xl mb-2 italic">Daily Essentials</h3>
-                    <p class="text-stone-300 text-sm mb-4">Minimalist comfort for every day</p>
-                    <span class="text-white text-xs uppercase tracking-widest border-b border-white/30 inline-block pb-1">Explore Line</span>
+                <img src="pic3 (1).png" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" alt="Daily Essentials">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
+                <div class="absolute inset-0 flex flex-col justify-end p-8 text-white">
+                    <h3 class="text-2xl mb-1 italic">Daily Essentials</h3>
+                    <p class="text-stone-300 text-xs mb-4 uppercase tracking-tighter">Minimalist Grace</p>
+                    <span class="text-xs uppercase tracking-[0.2em] border-b border-white/30 pb-1 w-fit">Discover</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Bespoke Service Banner -->
-    <section id="bespoke" class="luxury-gradient py-24 px-6 overflow-hidden">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
-            <div class="md:w-1/2 text-white">
-                <h2 class="text-4xl md:text-5xl mb-6 italic leading-tight">Your Vision, Our <br> <span class="gold-accent">Craftsmanship</span></h2>
-                <p class="text-stone-400 mb-8 leading-relaxed">Hanadi Fashion provides a unique service where you can bring any design or photo to life. Our master tailors recreate your dream style with premium fabrics and impeccable finishing.</p>
-                <ul class="space-y-4 mb-10">
-                    <li class="flex items-center gap-4 text-sm tracking-wide">
-                        <span class="w-8 h-8 rounded-full border border-amber-600 flex items-center justify-center text-xs">01</span>
-                        Upload your inspiration photo
-                    </li>
-                    <li class="flex items-center gap-4 text-sm tracking-wide">
-                        <span class="w-8 h-8 rounded-full border border-amber-600 flex items-center justify-center text-xs">02</span>
-                        Choose from our 200+ luxury fabrics
-                    </li>
-                    <li class="flex items-center gap-4 text-sm tracking-wide">
-                        <span class="w-8 h-8 rounded-full border border-amber-600 flex items-center justify-center text-xs">03</span>
-                        Custom tailoring to your exact fit
-                    </li>
-                </ul>
-                <button class="bg-amber-600 text-white px-10 py-4 uppercase text-xs tracking-[0.2em] font-bold hover:bg-amber-700 transition-all">Start Bespoke Order</button>
-            </div>
-            <div class="md:w-1/2 relative">
-                <div class="grid grid-cols-2 gap-4">
-                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1780&auto=format&fit=crop" class="rounded-tl-[100px] w-full h-64 object-cover border-4 border-zinc-800" alt="Tailoring Details">
-                    <img src="https://images.unsplash.com/photo-1520006403909-838d6b92c22e?q=80&w=2070&auto=format&fit=crop" class="rounded-br-[100px] w-full h-64 object-cover mt-12 border-4 border-zinc-800" alt="Luxury Fabric">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Best Sellers -->
-    <section class="py-24 bg-stone-100">
+    <!-- Product Feed -->
+    <section id="new-arrivals" class="py-24 bg-stone-100">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-3xl italic">New Arrivals</h2>
-                    <p class="text-stone-500 text-sm mt-2">Recently added to the collection</p>
-                </div>
-                <a href="#" class="text-xs uppercase tracking-widest border-b border-stone-300 pb-1">View All</a>
-            </div>
-
+            <h2 class="text-3xl italic mb-12">New Arrivals</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Product 1 -->
-                <div class="group">
-                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
-                        <img src="https://images.unsplash.com/photo-1621184414184-0155f0ce6f07?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Angel Barbie Cutting Abaya">
-                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
-                        </div>
-                        <span class="absolute top-4 left-4 bg-amber-600 text-white text-[10px] uppercase font-bold px-2 py-1 tracking-tighter">VIP Limited</span>
+                <div class="group bg-white p-4 product-card shadow-sm hover:shadow-md transition-shadow">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-stone-200">
+                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Angel Barbie Abaya">
+                        <button onclick="addToCart(1, 'Angel Barbie Abaya', 450, 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?q=80&w=200')" class="absolute bottom-0 left-0 right-0 bg-zinc-900 text-white py-4 translate-y-full group-hover:translate-y-0 transition-transform text-[10px] uppercase tracking-widest font-bold">Add to Bag</button>
                     </div>
-                    <h3 class="font-medium text-stone-800">Angel Barbie Cutting Abaya</h3>
-                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 450.00</p>
+                    <h3 class="text-sm font-medium">Angel Barbie Abaya</h3>
+                    <p class="text-amber-700 text-sm mt-1">AED 450.00</p>
                 </div>
-
                 <!-- Product 2 -->
-                <div class="group">
-                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
-                        <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Midnight Silk Jalabiya">
-                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
-                        </div>
+                <div class="group bg-white p-4 product-card shadow-sm hover:shadow-md transition-shadow">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-stone-200">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Midnight Silk Jalabiya">
+                        <button onclick="addToCart(2, 'Midnight Silk Jalabiya', 380, 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200')" class="absolute bottom-0 left-0 right-0 bg-zinc-900 text-white py-4 translate-y-full group-hover:translate-y-0 transition-transform text-[10px] uppercase tracking-widest font-bold">Add to Bag</button>
                     </div>
-                    <h3 class="font-medium text-stone-800">Midnight Silk Jalabiya</h3>
-                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 380.00</p>
+                    <h3 class="text-sm font-medium">Midnight Silk Jalabiya</h3>
+                    <p class="text-amber-700 text-sm mt-1">AED 380.00</p>
                 </div>
-
                 <!-- Product 3 -->
-                <div class="group">
-                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
-                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Pearl White Wedding Abaya">
-                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
-                        </div>
+                <div class="group bg-white p-4 product-card shadow-sm hover:shadow-md transition-shadow">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-stone-200">
+                        <img src="https://images.unsplash.com/photo-1596131397999-bb07343907fa?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Pearl White Wedding">
+                        <button onclick="addToCart(3, 'Pearl White Wedding', 1200, 'https://images.unsplash.com/photo-1596131397999-bb07343907fa?q=80&w=200')" class="absolute bottom-0 left-0 right-0 bg-zinc-900 text-white py-4 translate-y-full group-hover:translate-y-0 transition-transform text-[10px] uppercase tracking-widest font-bold">Add to Bag</button>
                     </div>
-                    <h3 class="font-medium text-stone-800">Pearl White Wedding Abaya</h3>
-                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 1,200.00</p>
+                    <h3 class="text-sm font-medium">Pearl White Wedding</h3>
+                    <p class="text-amber-700 text-sm mt-1">AED 1,200.00</p>
                 </div>
-
                 <!-- Product 4 -->
-                <div class="group">
-                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
-                        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1972&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Emerald Lace Sheila">
-                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
-                        </div>
+                <div class="group bg-white p-4 product-card shadow-sm hover:shadow-md transition-shadow">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-stone-200">
+                        <img src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Emerald Lace Sheila">
+                        <button onclick="addToCart(4, 'Emerald Lace Sheila', 150, 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=200')" class="absolute bottom-0 left-0 right-0 bg-zinc-900 text-white py-4 translate-y-full group-hover:translate-y-0 transition-transform text-[10px] uppercase tracking-widest font-bold">Add to Bag</button>
                     </div>
-                    <h3 class="font-medium text-stone-800">Emerald Lace Sheila</h3>
-                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 150.00</p>
+                    <h3 class="text-sm font-medium">Emerald Lace Sheila</h3>
+                    <p class="text-amber-700 text-sm mt-1">AED 150.00</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Social Proof -->
-    <section class="py-24 max-w-7xl mx-auto px-6">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl italic mb-4">Join Our Community</h2>
-            <a href="https://www.instagram.com/hanadi_moda/" target="_blank" class="text-amber-700 font-medium hover:underline">@hanadi_moda on Instagram</a>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-            <div class="aspect-square bg-stone-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 1">
+    <!-- Bespoke Banner -->
+    <section id="bespoke-section" class="luxury-gradient py-24 px-6 text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="md:w-1/2">
+                <h2 class="text-4xl md:text-5xl mb-6 italic">Your Vision, <br> <span class="text-amber-500">Our Masterpiece</span></h2>
+                <p class="text-stone-400 mb-8 max-w-lg">Bring your inspiration. Our master tailors recreate any style with the finest fabrics and a bespoke fit unique to you.</p>
+                <button onclick="toggleBespokeModal()" class="bg-amber-600 text-white px-10 py-4 uppercase text-xs tracking-widest font-bold hover:bg-amber-700 transition-all">Consult Our Atelier</button>
             </div>
-            <div class="aspect-square bg-stone-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 2">
-            </div>
-            <div class="aspect-square bg-stone-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1621184414184-0155f0ce6f07?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 3">
-            </div>
-            <div class="aspect-square bg-stone-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 4">
-            </div>
-            <div class="aspect-square bg-stone-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1563170351-be39c88ea276?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 5">
-            </div>
-            <div class="aspect-square bg-stone-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3ecc50f6?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 6">
+            <div class="md:w-1/2 flex gap-4">
+                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=600&auto=format&fit=crop" class="w-1/2 h-80 object-cover rounded-tl-[80px]" alt="Craftsmanship Detail">
+                <img src="https://images.unsplash.com/photo-1520006403909-838d6b92c22e?q=80&w=600&auto=format&fit=crop" class="w-1/2 h-80 object-cover rounded-br-[80px] mt-12 border border-zinc-700" alt="Luxury Fabric Detail">
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-zinc-900 text-stone-400 py-16 px-6">
+    <footer class="bg-zinc-950 text-stone-500 py-20 px-6 border-t border-zinc-900">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-            <div class="col-span-1 md:col-span-1">
-                <h3 class="text-white text-2xl font-bold brand-font mb-6 italic">HANADI MODA</h3>
-                <p class="text-sm leading-relaxed mb-6">Redefining modest elegance since 2018. Based in Dubai, shipping worldwide.</p>
+            <div class="col-span-1">
+                <h3 class="brand-font italic text-white text-2xl mb-6 uppercase">Hanadi <span class="text-stone-600">Fashion</span></h3>
+                <p class="text-xs leading-relaxed mb-8">Dubai-based atelier specializing in modern modest luxury. Redefining the Abaya since 2018.</p>
                 <div class="flex gap-4">
-                    <a href="https://www.instagram.com/hanadi_moda/" target="_blank" class="w-10 h-10 border border-stone-700 rounded-full flex items-center justify-center hover:bg-stone-700 hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="w-10 h-10 border border-stone-700 rounded-full flex items-center justify-center hover:bg-stone-700 hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 border border-stone-700 rounded-full flex items-center justify-center hover:bg-stone-700 hover:text-white transition-all"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/hanadi_moda/" target="_blank" class="hover:text-amber-500 transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-amber-500 transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="hover:text-amber-500 transition-colors"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
-
             <div>
-                <h4 class="text-white text-sm uppercase tracking-widest font-bold mb-6">Shopping</h4>
-                <ul class="space-y-4 text-sm">
-                    <li><a href="#" class="hover:text-white transition-colors">New Arrivals</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">VIP Collection</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Daily Abayas</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Jalabiyas</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Kids Collection</a></li>
+                <h4 class="text-white text-xs uppercase tracking-widest font-bold mb-6">Explore</h4>
+                <ul class="space-y-3 text-xs">
+                    <li><a href="#collections" class="hover:text-white transition-colors">Abayas</a></li>
+                    <li><a href="#collections" class="hover:text-white transition-colors">Jalabiyas</a></li>
+                    <li><a href="#collections" class="hover:text-white transition-colors">VIP Gowns</a></li>
                 </ul>
             </div>
-
             <div>
-                <h4 class="text-white text-sm uppercase tracking-widest font-bold mb-6">Customer Care</h4>
-                <ul class="space-y-4 text-sm">
-                    <li><a href="#" class="hover:text-white transition-colors">Size Guide</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Shipping Policy</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Returns & Exchanges</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Bespoke Inquiry</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                <h4 class="text-white text-xs uppercase tracking-widest font-bold mb-6">Concierge</h4>
+                <ul class="space-y-3 text-xs">
+                    <li><a href="#" class="hover:text-white transition-colors">Size Consultation</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Shipping</a></li>
+                    <li><button onclick="toggleBespokeModal()" class="hover:text-white transition-colors">Bespoke Inquiry</button></li>
                 </ul>
             </div>
-
             <div>
-                <h4 class="text-white text-sm uppercase tracking-widest font-bold mb-6">Subscribe</h4>
-                <p class="text-xs mb-4">Be the first to receive notifications on new collections and VIP early access.</p>
-                <form class="flex gap-2">
-                    <input type="email" placeholder="Your Email" class="bg-zinc-800 border-none px-4 py-3 text-sm focus:ring-1 focus:ring-amber-600 w-full rounded outline-none">
-                    <button type="button" class="bg-white text-black px-4 rounded hover:bg-amber-600 hover:text-white transition-colors">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </form>
+                <h4 class="text-white text-xs uppercase tracking-widest font-bold mb-6">Newsletter</h4>
+                <div class="flex border-b border-stone-800 pb-2">
+                    <input type="email" placeholder="Email Address" class="bg-transparent text-xs w-full outline-none focus:text-white">
+                    <button class="text-white" onclick="showToast('Thank you for subscribing!')"><i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
-        </div>
-        
-        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-zinc-800 text-center text-xs">
-            <p>&copy; 2025 Hanadi Fashion & Moda. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/yournumber" class="fixed bottom-8 right-8 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl z-50 hover:scale-110 transition-transform">
-        <i class="fab fa-whatsapp text-3xl"></i>
+    <!-- CART DRAWER -->
+    <div id="cartDrawer" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col cart-drawer">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h3 class="brand-font italic text-2xl">Shopping Bag</h3>
+                <button onclick="toggleCart()" class="text-stone-400 hover:text-black transition-colors"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div id="cartItems" class="flex-grow p-6 overflow-y-auto space-y-6">
+                <!-- Cart items load here -->
+                <div id="emptyCart" class="text-center py-20 text-stone-400">
+                    <i class="fas fa-shopping-bag text-4xl mb-4 opacity-20"></i>
+                    <p class="text-sm italic">Your bag is empty</p>
+                </div>
+            </div>
+            <div class="p-6 bg-stone-50 border-t">
+                <div class="flex justify-between mb-4">
+                    <span class="text-xs uppercase tracking-widest text-stone-500">Subtotal</span>
+                    <span id="cartSubtotal" class="font-bold">AED 0.00</span>
+                </div>
+                <button onclick="showToast('Secure checkout coming soon')" class="w-full bg-zinc-900 text-white py-4 uppercase text-[10px] tracking-widest font-bold hover:bg-amber-600 transition-colors">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BESPOKE MODAL -->
+    <div id="bespokeModal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-zinc-900/90 backdrop-blur-sm" onclick="toggleBespokeModal()"></div>
+        <div class="relative bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden modal-animate">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl italic brand-font">Bespoke Inquiry</h3>
+                    <button onclick="toggleBespokeModal()" class="text-stone-400 hover:text-stone-900"><i class="fas fa-times"></i></button>
+                </div>
+                <form id="bespokeForm" class="space-y-4">
+                    <input type="text" placeholder="Full Name" class="w-full p-3 border border-stone-200 rounded text-sm outline-none focus:border-amber-600" required>
+                    <input type="email" placeholder="Email Address" class="w-full p-3 border border-stone-200 rounded text-sm outline-none focus:border-amber-600" required>
+                    <textarea placeholder="Describe your dream design..." rows="3" class="w-full p-3 border border-stone-200 rounded text-sm outline-none focus:border-amber-600"></textarea>
+                    <div class="border-2 border-dashed border-stone-200 p-6 text-center rounded hover:border-amber-600 transition-colors cursor-pointer group">
+                        <i class="fas fa-cloud-upload-alt text-amber-600 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <p class="text-[10px] text-stone-500 uppercase tracking-widest">Upload Inspiration Photo</p>
+                        <input type="file" class="hidden" id="fileInp">
+                    </div>
+                    <button type="submit" class="w-full bg-zinc-900 text-white py-4 uppercase text-[10px] tracking-widest font-bold hover:bg-amber-700 transition-colors">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/yournumber" target="_blank" class="fixed bottom-6 left-6 bg-green-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-xl z-50 hover:scale-110 transition-transform">
+        <i class="fab fa-whatsapp text-2xl"></i>
     </a>
 
+    <script>
+        let cart = [];
+        
+        // --- 1. Cart Management ---
+        function addToCart(id, name, price, img) {
+            const item = { id, name, price, img };
+            cart.push(item);
+            updateCartUI();
+            showToast(`"${name}" added to your bag`);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const countBadge = document.getElementById('cartCountBadge');
+            const cartItems = document.getElementById('cartItems');
+            const subtotalEl = document.getElementById('cartSubtotal');
+            const emptyCart = document.getElementById('emptyCart');
+
+            countBadge.innerText = cart.length;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '';
+                cartItems.appendChild(emptyCart);
+                subtotalEl.innerText = 'AED 0.00';
+            } else {
+                cartItems.innerHTML = '';
+                let subtotal = 0;
+                
+                cart.forEach((item, index) => {
+                    subtotal += item.price;
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'flex gap-4 animate-in fade-in slide-in-from-right-4 duration-300';
+                    itemEl.innerHTML = `
+                        <img src="${item.img}" class="w-20 h-24 object-cover bg-stone-100">
+                        <div class="flex-grow">
+                            <h4 class="text-sm font-medium">${item.name}</h4>
+                            <p class="text-xs text-stone-500 mt-1">AED ${item.price.toFixed(2)}</p>
+                            <button onclick="removeFromCart(${index})" class="text-[10px] uppercase tracking-widest text-red-800 mt-2 hover:underline">Remove</button>
+                        </div>
+                    `;
+                    cartItems.appendChild(itemEl);
+                });
+                subtotalEl.innerText = `AED ${subtotal.toFixed(2)}`;
+            }
+        }
+
+        // --- 2. UI Toggles ---
+        function toggleCart() {
+            const drawer = document.getElementById('cartDrawer');
+            const content = drawer.querySelector('.cart-drawer');
+            
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => content.classList.add('open'), 10);
+            } else {
+                content.classList.remove('open');
+                setTimeout(() => drawer.classList.add('hidden'), 400);
+            }
+        }
+
+        function toggleBespokeModal() {
+            const modal = document.getElementById('bespokeModal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        // --- 3. Feedback (Toast) ---
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const message = document.getElementById('toastMessage');
+            message.innerText = msg;
+            toast.style.transform = 'translateX(0)';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateX(150%)';
+            }, 3000);
+        }
+
+        // --- 4. Event Listeners ---
+        document.getElementById('bespokeForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            toggleBespokeModal();
+            showToast("Inquiry sent. We'll contact you soon!");
+            e.target.reset();
+        });
+
+        // Mobile Menu Placeholder
+        document.getElementById('mobileMenuBtn').onclick = () => showToast("Menu coming soon...");
+    </script>
 </body>
 </html>
