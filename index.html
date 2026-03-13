@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanadi Moda | Luxury Abayas & Modest Fashion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .brand-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .luxury-gradient {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+        .gold-accent {
+            color: #d4af37;
+        }
+        .gold-bg {
+            background-color: #d4af37;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        /* Fallback for broken images */
+        img {
+            background-color: #f3f4f6;
+            position: relative;
+        }
+        img::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #e5e7eb;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+
+    <!-- Top Bar -->
+    <div class="bg-zinc-900 text-white py-2 px-4 text-center text-xs uppercase tracking-widest border-b border-zinc-800">
+        Complimentary Shipping on VIP Collections | International Delivery Available
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex gap-8 items-center hidden md:flex text-sm uppercase tracking-wider font-medium">
+                <a href="#collections" class="nav-link">Collections</a>
+                <a href="#vip" class="nav-link">VIP Line</a>
+                <a href="#bespoke" class="nav-link">Bespoke</a>
+            </div>
+            
+            <div class="text-3xl font-bold tracking-tighter brand-font italic">
+                HANADI <span class="text-stone-400 font-light not-italic">MODA</span>
+            </div>
+
+            <div class="flex gap-6 items-center">
+                <a href="https://www.instagram.com/hanadi_moda/" target="_blank" class="hover:text-amber-600 transition-colors">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <div class="relative">
+                    <i class="fas fa-shopping-bag text-xl cursor-pointer"></i>
+                    <span class="absolute -top-2 -right-2 bg-amber-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                </div>
+                <button class="md:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-[85vh] flex items-center overflow-hidden">
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+        <!-- High Quality Hero Image -->
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop" 
+             onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop'"
+             alt="Luxury Abaya" class="absolute inset-0 w-full h-full object-cover">
+        
+        <div class="relative z-20 max-w-7xl mx-auto px-6 w-full text-white">
+            <div class="max-w-2xl">
+                <span class="uppercase tracking-[0.3em] text-sm mb-4 block animate-pulse">The 2025 Collection</span>
+                <h1 class="text-6xl md:text-8xl mb-8 leading-tight">Elegance <br> <span class="italic font-light">Redefined</span></h1>
+                <p class="text-lg mb-10 text-stone-200 font-light max-w-md">Discover the artistry of Hanadi Moda. From everyday grace to bridal magnificence, we craft the essence of modesty.</p>
+                <div class="flex gap-4">
+                    <a href="#collections" class="bg-white text-zinc-900 px-8 py-4 uppercase text-xs tracking-widest font-bold hover:bg-amber-600 hover:text-white transition-all duration-300">Shop Now</a>
+                    <a href="#bespoke" class="border border-white/50 backdrop-blur-md px-8 py-4 uppercase text-xs tracking-widest font-bold hover:bg-white/10 transition-all duration-300">Bespoke Design</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Grid -->
+    <section id="collections" class="py-24 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl mb-4 italic">Our Curated Selection</h2>
+            <p class="text-stone-500 uppercase tracking-widest text-xs">Exquisite Fabrics & Master Tailoring</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- VIP Abayas -->
+            <div class="group cursor-pointer relative overflow-hidden aspect-[3/4]">
+                <img src="https://images.unsplash.com/photo-1585145197082-dba093ba6457?q=80&w=1974&auto=format&fit=crop" 
+                     class="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-110" alt="VIP Abaya">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                    <h3 class="text-white text-2xl mb-2 italic">VIP Collection</h3>
+                    <p class="text-stone-300 text-sm mb-4">Hand-embroidered masterpieces</p>
+                    <span class="text-white text-xs uppercase tracking-widest border-b border-white/30 inline-block pb-1">Explore Line</span>
+                </div>
+            </div>
+
+            <!-- Wedding/Bridal -->
+            <div class="group cursor-pointer relative overflow-hidden aspect-[3/4] md:-translate-y-12 shadow-2xl z-10">
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3ecc50f6?q=80&w=2071&auto=format&fit=crop" 
+                     class="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-110" alt="Wedding Abaya">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                    <h3 class="text-white text-2xl mb-2 italic">Bridal & Occasions</h3>
+                    <p class="text-stone-300 text-sm mb-4">For your most cherished moments</p>
+                    <span class="text-white text-xs uppercase tracking-widest border-b border-white/30 inline-block pb-1">Explore Line</span>
+                </div>
+            </div>
+
+            <!-- Daily Use -->
+            <div class="group cursor-pointer relative overflow-hidden aspect-[3/4]">
+                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=2070&auto=format&fit=crop" 
+                     class="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-110" alt="Daily Use Abaya">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
+                    <h3 class="text-white text-2xl mb-2 italic">Daily Essentials</h3>
+                    <p class="text-stone-300 text-sm mb-4">Minimalist comfort for every day</p>
+                    <span class="text-white text-xs uppercase tracking-widest border-b border-white/30 inline-block pb-1">Explore Line</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bespoke Service Banner -->
+    <section id="bespoke" class="luxury-gradient py-24 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="md:w-1/2 text-white">
+                <h2 class="text-4xl md:text-5xl mb-6 italic leading-tight">Your Vision, Our <br> <span class="gold-accent">Craftsmanship</span></h2>
+                <p class="text-stone-400 mb-8 leading-relaxed">Hanadi Fashion provides a unique service where you can bring any design or photo to life. Our master tailors recreate your dream style with premium fabrics and impeccable finishing.</p>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-center gap-4 text-sm tracking-wide">
+                        <span class="w-8 h-8 rounded-full border border-amber-600 flex items-center justify-center text-xs">01</span>
+                        Upload your inspiration photo
+                    </li>
+                    <li class="flex items-center gap-4 text-sm tracking-wide">
+                        <span class="w-8 h-8 rounded-full border border-amber-600 flex items-center justify-center text-xs">02</span>
+                        Choose from our 200+ luxury fabrics
+                    </li>
+                    <li class="flex items-center gap-4 text-sm tracking-wide">
+                        <span class="w-8 h-8 rounded-full border border-amber-600 flex items-center justify-center text-xs">03</span>
+                        Custom tailoring to your exact fit
+                    </li>
+                </ul>
+                <button class="bg-amber-600 text-white px-10 py-4 uppercase text-xs tracking-[0.2em] font-bold hover:bg-amber-700 transition-all">Start Bespoke Order</button>
+            </div>
+            <div class="md:w-1/2 relative">
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1780&auto=format&fit=crop" class="rounded-tl-[100px] w-full h-64 object-cover border-4 border-zinc-800" alt="Tailoring Details">
+                    <img src="https://images.unsplash.com/photo-1520006403909-838d6b92c22e?q=80&w=2070&auto=format&fit=crop" class="rounded-br-[100px] w-full h-64 object-cover mt-12 border-4 border-zinc-800" alt="Luxury Fabric">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section class="py-24 bg-stone-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl italic">New Arrivals</h2>
+                    <p class="text-stone-500 text-sm mt-2">Recently added to the collection</p>
+                </div>
+                <a href="#" class="text-xs uppercase tracking-widest border-b border-stone-300 pb-1">View All</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="group">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1621184414184-0155f0ce6f07?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Angel Barbie Cutting Abaya">
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
+                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                        <span class="absolute top-4 left-4 bg-amber-600 text-white text-[10px] uppercase font-bold px-2 py-1 tracking-tighter">VIP Limited</span>
+                    </div>
+                    <h3 class="font-medium text-stone-800">Angel Barbie Cutting Abaya</h3>
+                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 450.00</p>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="group">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Midnight Silk Jalabiya">
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
+                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="font-medium text-stone-800">Midnight Silk Jalabiya</h3>
+                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 380.00</p>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="group">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Pearl White Wedding Abaya">
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
+                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="font-medium text-stone-800">Pearl White Wedding Abaya</h3>
+                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 1,200.00</p>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="group">
+                    <div class="relative overflow-hidden aspect-[4/5] mb-4 bg-white shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1972&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Emerald Lace Sheila">
+                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
+                            <button class="w-full bg-zinc-900 text-white py-3 text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="font-medium text-stone-800">Emerald Lace Sheila</h3>
+                    <p class="text-amber-700 text-sm font-semibold mt-1">AED 150.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="py-24 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl italic mb-4">Join Our Community</h2>
+            <a href="https://www.instagram.com/hanadi_moda/" target="_blank" class="text-amber-700 font-medium hover:underline">@hanadi_moda on Instagram</a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            <div class="aspect-square bg-stone-200 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 1">
+            </div>
+            <div class="aspect-square bg-stone-200 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 2">
+            </div>
+            <div class="aspect-square bg-stone-200 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1621184414184-0155f0ce6f07?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 3">
+            </div>
+            <div class="aspect-square bg-stone-200 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 4">
+            </div>
+            <div class="aspect-square bg-stone-200 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1563170351-be39c88ea276?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 5">
+            </div>
+            <div class="aspect-square bg-stone-200 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3ecc50f6?q=80&w=400&h=400&fit=crop" class="w-full h-full object-cover hover:opacity-80 transition-opacity" alt="Style Look 6">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-zinc-900 text-stone-400 py-16 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-1">
+                <h3 class="text-white text-2xl font-bold brand-font mb-6 italic">HANADI MODA</h3>
+                <p class="text-sm leading-relaxed mb-6">Redefining modest elegance since 2018. Based in Dubai, shipping worldwide.</p>
+                <div class="flex gap-4">
+                    <a href="https://www.instagram.com/hanadi_moda/" target="_blank" class="w-10 h-10 border border-stone-700 rounded-full flex items-center justify-center hover:bg-stone-700 hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 border border-stone-700 rounded-full flex items-center justify-center hover:bg-stone-700 hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 border border-stone-700 rounded-full flex items-center justify-center hover:bg-stone-700 hover:text-white transition-all"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white text-sm uppercase tracking-widest font-bold mb-6">Shopping</h4>
+                <ul class="space-y-4 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">New Arrivals</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">VIP Collection</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Daily Abayas</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Jalabiyas</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Kids Collection</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white text-sm uppercase tracking-widest font-bold mb-6">Customer Care</h4>
+                <ul class="space-y-4 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">Size Guide</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Shipping Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Returns & Exchanges</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Bespoke Inquiry</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white text-sm uppercase tracking-widest font-bold mb-6">Subscribe</h4>
+                <p class="text-xs mb-4">Be the first to receive notifications on new collections and VIP early access.</p>
+                <form class="flex gap-2">
+                    <input type="email" placeholder="Your Email" class="bg-zinc-800 border-none px-4 py-3 text-sm focus:ring-1 focus:ring-amber-600 w-full rounded outline-none">
+                    <button type="button" class="bg-white text-black px-4 rounded hover:bg-amber-600 hover:text-white transition-colors">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-zinc-800 text-center text-xs">
+            <p>&copy; 2025 Hanadi Fashion & Moda. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/yournumber" class="fixed bottom-8 right-8 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl z-50 hover:scale-110 transition-transform">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+
+</body>
+</html>
